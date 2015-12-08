@@ -49,31 +49,63 @@ public class RandomPlayer implements BattleshipsPlayer {
         sizeX = board.sizeX();
         sizeY = board.sizeY();
         for (int i = 0; i < fleet.getNumberOfShips(); ++i) {
-            Ship s = fleet.getShip(i);
-            boolean vertical = rnd.nextBoolean();
-            Position pos = null;
-            boolean b = true;
-            if (vertical) {
-                while (b) {
+                Ship s = fleet.getShip(i);
+                boolean vertical = rnd.nextBoolean();
+                Position pos = null;
+                if (vertical) {
                     int x = rnd.nextInt(sizeX);
                     int y = rnd.nextInt(sizeY - (s.size() - 1));
-                    if (y >= 1) {
-                        pos = new Position(x, y);
-
-                    }
-                }
-            } else {
-                while (b) {
+                    pos = new Position(x, y);
+                    Remember(pos, vertical, s.size());
+                } else {
                     int x = rnd.nextInt(sizeX - (s.size() - 1));
                     int y = rnd.nextInt(sizeY);
-                    if (x >= 1) {
-                        pos = new Position(x, y);
-
-                    }
+                    pos = new Position(x, y);
+                    Remember(pos, vertical, s.size());
+                }
+                if (Check(pos, vertical, s.size())) {
+                    board.placeShip(pos, s, vertical);
                 }
             }
-            board.placeShip(pos, s, vertical);
         }
+
+    public void Remember(Position pos, boolean vert, int s) {
+        if (vert) {
+            for (int k = 0; k < s; k++) {
+                aL[pos.y + k][pos.x] = 1;
+            }
+        } else {
+            for (int k = 0; k < s; k++) {
+                aL[pos.y][pos.x + k] = 1;
+            }
+        }
+    }
+
+    public boolean Check(Position pos, boolean vert, int s) {
+        int check = 0;
+        if (vert) {
+            for (int j = 0; j < s; j++) {
+                if (aL[pos.y][pos.x + j] > 0) {
+                    check = 0;
+                    break;
+                } else if (aL[pos.y][pos.x + j] > 0) {
+                    check = 1;
+                }
+            }
+        } else {
+            for (int j = 0; j < s; j++) {
+                if (aL[pos.y][pos.x + j] > 0) {
+                    check = 0;
+                    break;
+                } else if (aL[pos.y][pos.x + j] > 0) {
+                    check = 1;
+                }
+            }
+        }
+        if (check == 1) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -85,7 +117,8 @@ public class RandomPlayer implements BattleshipsPlayer {
      * @param pos Position of the enemy's shot
      */
     @Override
-    public void incoming(Position pos) {
+    public void incoming(Position pos
+    ) {
         //Do nothing
     }
 
@@ -100,7 +133,8 @@ public class RandomPlayer implements BattleshipsPlayer {
      * @return Position of you next shot.
      */
     @Override
-    public Position getFireCoordinates(Fleet enemyShips) {
+    public Position getFireCoordinates(Fleet enemyShips
+    ) {
         int x = rnd.nextInt(sizeX);
         int y = rnd.nextInt(sizeY);
         return new Position(x, y);
@@ -117,7 +151,8 @@ public class RandomPlayer implements BattleshipsPlayer {
      * @param enemyShips Fleet the enemy's ships.
      */
     @Override
-    public void hitFeedBack(boolean hit, Fleet enemyShips) {
+    public void hitFeedBack(boolean hit, Fleet enemyShips
+    ) {
         //Do nothing
     }
 
@@ -128,7 +163,8 @@ public class RandomPlayer implements BattleshipsPlayer {
      * @param rounds int the number of rounds i a match
      */
     @Override
-    public void startMatch(int rounds) {
+    public void startMatch(int rounds
+    ) {
         //Do nothing
     }
 
@@ -138,7 +174,8 @@ public class RandomPlayer implements BattleshipsPlayer {
      * @param round int the current round number.
      */
     @Override
-    public void startRound(int round) {
+    public void startRound(int round
+    ) {
         //Do nothing
     }
 
@@ -153,7 +190,8 @@ public class RandomPlayer implements BattleshipsPlayer {
      * @param enemyPoints int enemy's points this round.
      */
     @Override
-    public void endRound(int round, int points, int enemyPoints) {
+    public void endRound(int round, int points, int enemyPoints
+    ) {
         //Do nothing
     }
 
@@ -166,7 +204,8 @@ public class RandomPlayer implements BattleshipsPlayer {
      * @param draw int the number of draws in this match.
      */
     @Override
-    public void endMatch(int won, int lost, int draw) {
+    public void endMatch(int won, int lost, int draw
+    ) {
         //Do nothing
     }
 }
