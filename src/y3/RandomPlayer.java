@@ -51,15 +51,26 @@ public class RandomPlayer implements BattleshipsPlayer {
         for (int i = 0; i < fleet.getNumberOfShips(); ++i) {
             Ship s = fleet.getShip(i);
             boolean vertical = rnd.nextBoolean();
-            Position pos;
+            Position pos = null;
+            boolean b = true;
             if (vertical) {
-                int x = rnd.nextInt(sizeX);
-                int y = rnd.nextInt(sizeY - (s.size() - 1));
-                pos = new Position(x, y);
+                while (b) {
+                    int x = rnd.nextInt(sizeX);
+                    int y = rnd.nextInt(sizeY - (s.size() - 1));
+                    if (y >= 1) {
+                        pos = new Position(x, y);
+
+                    }
+                }
             } else {
-                int x = rnd.nextInt(sizeX - (s.size() - 1));
-                int y = rnd.nextInt(sizeY);
-                pos = new Position(x, y);
+                while (b) {
+                    int x = rnd.nextInt(sizeX - (s.size() - 1));
+                    int y = rnd.nextInt(sizeY);
+                    if (x >= 1) {
+                        pos = new Position(x, y);
+
+                    }
+                }
             }
             board.placeShip(pos, s, vertical);
         }
