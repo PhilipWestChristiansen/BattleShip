@@ -22,7 +22,7 @@ public class RandomPlayer implements BattleshipsPlayer {
     private int sizeX;
     private int sizeY;
     private Board myBoard;
-    private int[][] aL = new int[10][10];
+    private final int[][] aL = new int[10][10];
 
     public RandomPlayer() {
     }
@@ -49,55 +49,66 @@ public class RandomPlayer implements BattleshipsPlayer {
         sizeX = board.sizeX();
         sizeY = board.sizeY();
         for (int i = 0; i < fleet.getNumberOfShips(); ++i) {
-                Ship s = fleet.getShip(i);
-                boolean vertical = rnd.nextBoolean();
-                Position pos = null;
+            Ship s = fleet.getShip(i);
+            boolean vertical = rnd.nextBoolean();
+            Position pos = null;
+            boolean start = true;
+            while (start) {
                 if (vertical) {
                     int x = rnd.nextInt(sizeX);
                     int y = rnd.nextInt(sizeY - (s.size() - 1));
                     pos = new Position(x, y);
-                    Remember(pos, vertical, s.size());
                 } else {
                     int x = rnd.nextInt(sizeX - (s.size() - 1));
                     int y = rnd.nextInt(sizeY);
                     pos = new Position(x, y);
-                    Remember(pos, vertical, s.size());
                 }
-                if (Check(pos, vertical, s.size())) {
+                if (Check(pos, vertical, s)) {
+                    Remember(pos, vertical, s);
                     board.placeShip(pos, s, vertical);
+                    start = false;
                 }
             }
         }
+    }
 
-    public void Remember(Position pos, boolean vert, int s) {
+    public void Remember(Position pos, boolean vert, Ship s) {
+       //Alle pladser i arrayet er sat til 0 fra starten af.
+       //Metoden skal placere skibene i vores array og gemme dem 
+       //som 1 taller
         if (vert) {
-            for (int k = 0; k < s; k++) {
+            for (int k = 0; k < s.size(); k++) {
                 aL[pos.y + k][pos.x] = 1;
             }
         } else {
-            for (int k = 0; k < s; k++) {
+            for (int k = 0; k < s.size(); k++) {
                 aL[pos.y][pos.x + k] = 1;
             }
         }
     }
 
-    public boolean Check(Position pos, boolean vert, int s) {
+    public boolean Check(Position pos, boolean vert, Ship s) {
+        //Kigger i vores 2d array. 
+        //Hvis et af pladserne har værdien 1, så er pladsen optaget og
+        //hele metoden skal stoppes og return false.
+        //Ellers hvis alle pladserne, som loopet tjekker er 0 (dvs. der ikke er noget),
+        //så skal den return true.
         int check = 0;
         if (vert) {
-            for (int j = 0; j < s; j++) {
-                if (aL[pos.y][pos.x + j] > 0) {
+            for (int j = 0; j < s.size(); j++) {
+                if (aL[pos.y + j][pos.x] > 0) {
                     check = 0;
                     break;
-                } else if (aL[pos.y][pos.x + j] > 0) {
+                } else if (aL[pos.y + j][pos.x] == 0) {
                     check = 1;
                 }
             }
         } else {
-            for (int j = 0; j < s; j++) {
+            for (int j = 0; j < s.size(); j++) {
                 if (aL[pos.y][pos.x + j] > 0) {
                     check = 0;
                     break;
-                } else if (aL[pos.y][pos.x + j] > 0) {
+                } else if (aL[pos.y][pos.x + j] == 0) {
                     check = 1;
                 }
             }
