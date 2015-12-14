@@ -28,13 +28,13 @@ public class Y3 implements PlayerFactory<BattleshipsPlayer>
     @Override
     public String getID()
     {
-        return "E1";
+        return "Y3";
     }
 
     @Override
     public String getName()
     {
-        return "Random player";
+        return "Mommaayyy";
     }
     
 }
