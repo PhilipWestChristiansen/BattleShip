@@ -35,124 +35,16 @@ public class RandomPlayer implements BattleshipsPlayer {
     private int sizeX;
     private int sizeY;
     private Board myBoard;
-    private ArrayList<Position> usedShipNumbers = new ArrayList<>();
-    private ArrayList<Position> usedNumbers = new ArrayList<>();
-    private int currentAShips = 5;
-    private int hitAmount = 0;
-    ArrayList<Position> huntNumbers = new ArrayList<>();
-    private boolean hunt = false;
-    private int e2Count = 0;
-    private boolean e2Active = false;
-    boolean used2 = false;
+
     private int[][] aL = new int[10][10];
-
-    private ArrayList<Position> e4 = new ArrayList<>();
-    private Position shot1 = new Position(0, 2);
-    private Position shot2 = new Position(0, 6);
-    private Position shot3 = new Position(1, 1);
-    private Position shot4 = new Position(1, 5);
-    private Position shot5 = new Position(1, 9);
-    private Position shot6 = new Position(2, 0);
-    private Position shot7 = new Position(2, 4);
-    private Position shot8 = new Position(2, 8);
-    private Position shot9 = new Position(3, 3);
-    private Position shot10 = new Position(3, 7);
-    private Position shot11 = new Position(4, 2);
-    private Position shot12 = new Position(4, 6);
-    private Position shot13 = new Position(5, 1);
-    private Position shot14 = new Position(5, 5);
-    private Position shot15 = new Position(5, 9);
-    private Position shot16 = new Position(6, 0);
-    private Position shot17 = new Position(6, 4);
-    private Position shot18 = new Position(6, 8);
-    private Position shot19 = new Position(7, 3);
-    private Position shot20 = new Position(7, 7);
-    private Position shot21 = new Position(8, 2);
-    private Position shot22 = new Position(8, 6);
-    private Position shot23 = new Position(9, 1);
-    private Position shot24 = new Position(9, 5);
-    private Position shot25 = new Position(9, 9);
-
-    private ArrayList<Position> e2 = new ArrayList<>();
-    private Position shot26 = new Position(0, 0);
-    private Position shot27 = new Position(0, 4);
-    private Position shot28 = new Position(0, 8);
-    private Position shot29 = new Position(1, 3);
-    private Position shot30 = new Position(1, 7);
-    private Position shot31 = new Position(2, 2);
-    private Position shot32 = new Position(2, 6);
-    private Position shot33 = new Position(3, 1);
-    private Position shot34 = new Position(3, 5);
-    private Position shot35 = new Position(3, 9);
-    private Position shot36 = new Position(4, 0);
-    private Position shot37 = new Position(4, 4);
-    private Position shot38 = new Position(4, 8);
-    private Position shot39 = new Position(5, 3);
-    private Position shot40 = new Position(5, 7);
-    private Position shot41 = new Position(6, 2);
-    private Position shot42 = new Position(6, 6);
-    private Position shot43 = new Position(7, 1);
-    private Position shot44 = new Position(7, 5);
-    private Position shot45 = new Position(7, 9);
-    private Position shot46 = new Position(8, 0);
-    private Position shot47 = new Position(8, 4);
-    private Position shot48 = new Position(8, 8);
-    private Position shot49 = new Position(9, 3);
-    private Position shot50 = new Position(9, 7);
-    private boolean used3;
+    private ArrayList storeShipCoords = new ArrayList();
+    private int[][] storeShots = new int[10][10];
+    boolean shipHit = false;
+    int prevShotX = 0;
+    int prevShotY = 0;
+    private ArrayList<Position> huntTargetCoord = new ArrayList();
 
     public RandomPlayer() {
-        e4.add(shot1);
-        e4.add(shot2);
-        e4.add(shot3);
-        e4.add(shot4);
-        e4.add(shot5);
-        e4.add(shot6);
-        e4.add(shot7);
-        e4.add(shot8);
-        e4.add(shot9);
-        e4.add(shot10);
-        e4.add(shot11);
-        e4.add(shot12);
-        e4.add(shot13);
-        e4.add(shot14);
-        e4.add(shot15);
-        e4.add(shot16);
-        e4.add(shot17);
-        e4.add(shot18);
-        e4.add(shot19);
-        e4.add(shot20);
-        e4.add(shot21);
-        e4.add(shot22);
-        e4.add(shot23);
-        e4.add(shot24);
-        e4.add(shot25);
-
-        e2.add(shot26);
-        e2.add(shot27);
-        e2.add(shot28);
-        e2.add(shot29);
-        e2.add(shot30);
-        e2.add(shot31);
-        e2.add(shot32);
-        e2.add(shot33);
-        e2.add(shot34);
-        e2.add(shot35);
-        e2.add(shot36);
-        e2.add(shot37);
-        e2.add(shot38);
-        e2.add(shot39);
-        e2.add(shot40);
-        e2.add(shot41);
-        e2.add(shot42);
-        e2.add(shot43);
-        e2.add(shot44);
-        e2.add(shot45);
-        e2.add(shot46);
-        e2.add(shot47);
-        e2.add(shot48);
-        e2.add(shot49);
-        e2.add(shot50);
     }
 
     /**
@@ -176,6 +68,11 @@ public class RandomPlayer implements BattleshipsPlayer {
         myBoard = board;
         sizeX = board.sizeX();
         sizeY = board.sizeY();
+//        Ship s1 = fleet.getShip(0);
+//        int y2 = sizeY - (s1.size() - 1);
+//        Position pos1 = new Position(sizeX, y2);
+//        board.placeShip(pos1, s1, false);
+
         for (int i = 0; i < fleet.getNumberOfShips(); ++i) {
             Ship s = fleet.getShip(i);
             boolean vertical = rnd.nextBoolean();
@@ -272,81 +169,58 @@ public class RandomPlayer implements BattleshipsPlayer {
      */
     @Override
     public Position getFireCoordinates(Fleet enemyShips) {
-        boolean used = true;
-        Position xy = null;
-
-        while (hunt == true && used == true) {
-
-            xy = hunt();
-
-            if (!usedNumbers.contains(xy)) {
-                usedNumbers.add(xy);
-                used = false;
-            }
-        }
         {
-
-            while (used == true && hunt == false) {
-//        int x = rnd.nextInt(sizeX);
-//        int y = rnd.nextInt(sizeY);
-//
-//        xy = new Position(x, y);
-
-                e2Count = 0;
-                for (int i = 0; i < e4.size(); i++) {
-                    if (usedNumbers.contains(e4.get(i))) {
-                        e2Count++;
-                    }
-                }
-
-                if (e2Count <= 24) {
-                    xy = e4.get(rnd.nextInt(e4.size()));
-                }
-
-                if (e2Count > 24 || e2Active == true) {
-                    e2Active = true;
-                    xy = e2.get(rnd.nextInt(e2.size()));
-                }
-
-                if (!usedNumbers.contains(xy)) {
-                    huntNumbers.clear();
-                    huntNumbers.add(xy);
-                    usedNumbers.add(xy);
-                    used = false;
-                }
+            if (shipHit) {
+                addNearPos(prevShotX, prevShotY);
+                shipHit = false;
             }
+
+            if (!huntTargetCoord.isEmpty()) {
+                storeShotCoords(huntTargetCoord.get(huntTargetCoord.size() - 1).x, huntTargetCoord.get(huntTargetCoord.size() - 1).y);
+                prevShotX = huntTargetCoord.get(huntTargetCoord.size() - 1).x;
+                prevShotY = huntTargetCoord.get(huntTargetCoord.size() - 1).y;
+                return huntTargetCoord.remove(huntTargetCoord.size() - 1);
+            }
+
+            int x = rnd.nextInt(sizeX);
+            int y = rnd.nextInt(sizeY);
+            prevShotX = x;
+            prevShotY = y;
+
+            if (x >= sizeX || y >= sizeY || storeShots[x][y] == 1) {
+                return getFireCoordinates(enemyShips);
+            } else {
+                storeShotCoords(x, y);
+                return new Position(x, y);
+            }
+
         }
-        return xy;
     }
 
-    public Position hunt() {
-        Position startPoint = huntNumbers.get(0);
+    public void storeShotCoords(int x, int y) {
+        storeShots[x][y] = 1;
+    }
 
-        Position north = new Position(startPoint.x, startPoint.y + 1);
-        Position east = new Position(startPoint.x + 1, startPoint.y);
-        Position south = new Position(startPoint.x, startPoint.y - 1);
-        Position west = new Position(startPoint.x - 1, startPoint.y);
+    public boolean checkFireCoord(int x, int y) {
+        if (x >= sizeX || x < 0 || y < 0 || y >= sizeY || storeShots[x][y] > 0) {
+            return false;
+        }
+        return true;
+    }
 
-        if (!huntNumbers.contains(north) && startPoint.x <= 9 && startPoint.x >= 0 && startPoint.y <= 9 && startPoint.y >= 0) {
-            huntNumbers.add(north);
-            return north;
+    public void addNearPos(int x, int y) {
+        if (checkFireCoord(x + 1, y)) {
+            huntTargetCoord.add(new Position(x + 1, y));
         }
-        if (!huntNumbers.contains(east) && startPoint.x <= 9 && startPoint.x >= 0 && startPoint.y <= 9 && startPoint.y >= 0) {
-            huntNumbers.add(east);
-            return east;
+        if (checkFireCoord(x - 1, y)) {
+            huntTargetCoord.add(new Position(x - 1, y));
         }
-        if (!huntNumbers.contains(south) && startPoint.x <= 9 && startPoint.x >= 0 && startPoint.y <= 9 && startPoint.y >= 0) {
-            huntNumbers.add(south);
-            return south;
+        if (checkFireCoord(x, y + 1)) {
+            huntTargetCoord.add(new Position(x, y + 1));
         }
-        if (!huntNumbers.contains(west) && startPoint.x <= 9 && startPoint.x >= 0 && startPoint.y <= 9 && startPoint.y >= 0) {
-            huntNumbers.add(west);
-            return west;
+        if (checkFireCoord(x, y - 1)) {
+            huntTargetCoord.add(new Position(x, y - 1));
         }
-
-        huntNumbers.clear();
-        hunt = false;
-        return new Position(1, 1);
     }
 
     /**
@@ -361,19 +235,8 @@ public class RandomPlayer implements BattleshipsPlayer {
      */
     @Override
     public void hitFeedBack(boolean hit, Fleet enemyShips) {
-
-        if (hit == true) {
-            //hitAmount++;
-            hunt = true;
-//      int newAShips = enemyShips.getNumberOfShips();
-//      if (currentAShips > newAShips)
-//      {
-//        currentAShips = enemyShips.getNumberOfShips();
-//        hunt = false;
-//      }
-        } else // Do nothing
-        {
-
+        if (hit) {
+            shipHit = true;
         }
     }
 
@@ -384,7 +247,8 @@ public class RandomPlayer implements BattleshipsPlayer {
      * @param rounds int the number of rounds i a match
      */
     @Override
-    public void startMatch(int rounds) {
+    public void startMatch(int rounds
+    ) {
     }
 
     /**
@@ -393,11 +257,15 @@ public class RandomPlayer implements BattleshipsPlayer {
      * @param round int the current round number.
      */
     @Override
-    public void startRound(int round) {
+    public void startRound(int round
+    ) {
         aL = new int[10][10];
-        usedShipNumbers.clear();
-        usedNumbers.clear();
-        huntNumbers.clear();
+        ArrayList storeShipCoords = new ArrayList();
+        storeShots = new int[10][10];
+        shipHit = false;
+        prevShotX = 0;
+        prevShotY = 0;
+        huntTargetCoord = new ArrayList();
     }
 
     /**
@@ -411,7 +279,8 @@ public class RandomPlayer implements BattleshipsPlayer {
      * @param enemyPoints int enemy's points this round.
      */
     @Override
-    public void endRound(int round, int points, int enemyPoints) {
+    public void endRound(int round, int points, int enemyPoints
+    ) {
         //Do nothing
     }
 
