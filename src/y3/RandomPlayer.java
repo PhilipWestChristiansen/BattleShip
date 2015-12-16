@@ -68,10 +68,6 @@ public class RandomPlayer implements BattleshipsPlayer {
         myBoard = board;
         sizeX = board.sizeX();
         sizeY = board.sizeY();
-//        Ship s1 = fleet.getShip(0);
-//        int y2 = sizeY - (s1.size() - 1);
-//        Position pos1 = new Position(sizeX, y2);
-//        board.placeShip(pos1, s1, false);
 
         for (int i = 0; i < fleet.getNumberOfShips(); ++i) {
             Ship s = fleet.getShip(i);
