@@ -1,18 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package y3;
 
 import battleship.interfaces.BattleshipsPlayer;
 import tournament.player.PlayerFactory;
 
-/**
- *
- * @author Tobias Grundtvig
- */
 public class Y3 implements PlayerFactory<BattleshipsPlayer>
 {
 
@@ -34,7 +24,7 @@ public class Y3 implements PlayerFactory<BattleshipsPlayer>
     @Override
     public String getName()
     {
-        return "Mommaayyy";
+        return "Moooooomaaaaaayyyy 2.0";
     }
     
 }
